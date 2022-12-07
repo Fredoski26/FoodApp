@@ -12,9 +12,9 @@ class RouterHelper{
   static const String recommendedFood="/recommended-food";
 
   static String getInitial()=>'$initial';
-  static String getPopularFood(int pageId)=>'$popularFood?pageId=$pageId';
-  static String getCartPage(int pageId)=>'$cartPage?pageId=$pageId';
-  static String getRecommendedFood(int pageId)=>'$recommendedFood?pageId=$pageId';
+  static String getPopularFood(int pageId, String page)=>'$popularFood?pageId=$pageId&page=$page';
+  static String getCartPage(int pageId)=>'$cartPage';
+  static String getRecommendedFood(int pageId, String page)=>'$recommendedFood?pageId=$pageId&page=$page';
 
 
   static List<GetPage> routes=[
@@ -23,7 +23,8 @@ class RouterHelper{
 
     GetPage(name: popularFood, page: (){
       var pageId=Get.parameters["pageId"];
-     return PopularFoodDetail(pageId:int.parse(pageId!));
+      var page = Get.parameters["page"];
+     return PopularFoodDetail(pageId:int.parse(pageId!),page:page!);
     },
    // transition: Transition.fadeIn
     ),
@@ -31,15 +32,16 @@ class RouterHelper{
 
     GetPage(name: recommendedFood, page: (){
       var pageId=Get.parameters["pageId"];
-      return RecommendedFoodDetail(pageId: int.parse(pageId!));
+      var page = Get.parameters["page"];
+      return RecommendedFoodDetail(pageId: int.parse(pageId!), page:page!);
     },
         //transition: Transition.fadeIn
     ),
 
 
     GetPage(name: cartPage, page: (){
-      var pageId=Get.parameters["pageId"];
-      return CartPage(pageId:int.parse(pageId!));
+     // var pageId=Get.parameters["pageId"];
+      return CartPage();
     },
       // transition: Transition.fadeIn
     ),

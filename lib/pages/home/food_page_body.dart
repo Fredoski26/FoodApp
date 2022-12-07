@@ -126,7 +126,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
 
               return GestureDetector(
                 onTap: (){
-                  Get.toNamed(RouterHelper.getRecommendedFood(index),);
+                  Get.toNamed(RouterHelper.getRecommendedFood(index, "home"));
                 },
                 child: Container(
 
@@ -260,7 +260,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
           children: [
             GestureDetector(
               onTap: (){
-                Get.toNamed(RouterHelper.getPopularFood(index));
+                Get.toNamed(RouterHelper.getPopularFood(index, "home"));
               },
               child: Container(
                 height: Dimension.pageViewContainer,

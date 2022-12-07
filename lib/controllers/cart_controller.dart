@@ -32,6 +32,7 @@ class CartController extends GetxController {
           quantity: value.quantity!+quantity,
           isExist: true,
           time: DateTime.now().toString(),
+          product: product,
         );
       });
  if(totalQuantity<=0){
@@ -39,11 +40,12 @@ class CartController extends GetxController {
  }
     }else{
       if(quantity>0){
+       // print("length"+_item.length.toString());
         _item.putIfAbsent(
             product.id!,
                 () {
               //Get.snackbar("Message", "message add to cart"+product.id.toString()+ "quant"+quantity.toString());
-
+             //  print("adding id "+product.id!.toString()+ " quantity " +quantity.toString());
               return CartModel(
                 id: product.id,
                 name: product.name,
@@ -52,25 +54,27 @@ class CartController extends GetxController {
                 quantity: quantity,
                 isExist: true,
                 time: DateTime.now().toString(),
+                product: product,
               );});
       }else{
         HapticFeedback.vibrate();
       }
     }
-
+update();
   }
 
   bool existInCart(ProductModel product){
     if(_item.containsKey(product.id!)){
       return true;
-    }else{return false;}
+    }
+    return false;
   }
 
   int getQuantity(ProductModel product){
     var quantity=0;
     if(_item.containsKey(product.id!)){
       _item.forEach((key, value) {
-        if(key==product.id!){
+        if(key==product.id){
           quantity = value.quantity!;
         }
       });
@@ -83,5 +87,12 @@ class CartController extends GetxController {
       totalQuantity += value.quantity!;
     });
     return totalQuantity;
+  }
+
+  List<CartModel> get getItems{
+   return _item.entries.map((e){
+   return   e.value;
+    }
+    ).toList();
   }
 }

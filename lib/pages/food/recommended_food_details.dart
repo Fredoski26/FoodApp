@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/controllers/popular_product_controller.dart';
 import 'package:foodapp/controllers/recommended_product_controller.dart';
-import 'package:foodapp/pages/cart/cart_page.dart';
 import 'package:foodapp/routes/route_helper.dart';
 import 'package:foodapp/utils/app_constant.dart';
 import 'package:foodapp/utils/colors.dart';
@@ -10,16 +9,15 @@ import 'package:foodapp/utils/dimension.dart';
 import 'package:foodapp/widgets/app_icons.dart';
 import 'package:foodapp/widgets/bg_text.dart';
 import 'package:get/get.dart';
-
 import '../../controllers/cart_controller.dart';
 import '../../widgets/expandable.dart';
 
 class RecommendedFoodDetail extends StatelessWidget {
   final int pageId;
-
+  final String page;
   const RecommendedFoodDetail({
     Key? key,
-    required this.pageId,
+    required this.pageId, required this.page,
   }) : super(key: key);
 
   @override
@@ -41,27 +39,38 @@ class RecommendedFoodDetail extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Get.toNamed(RouterHelper.initial);
+                  onTap:(){
+                    if(page=="cartpage"){
+                      Get.toNamed(RouterHelper.getCartPage(pageId));
+                    }else{
+                      Get.toNamed(RouterHelper.getInitial());
+                    }
                   },
+                 /* onTap: () {
+                    Get.toNamed(RouterHelper.initial);
+                  },*/
                   child: AppIcon(icon: Icons.clear),
                 ),
-               // AppIcon(icon: Icons.shopping_cart_outlined),
+                 // AppIcon(icon: Icons.shopping_cart_outlined),
                 GetBuilder<PopularProductController>(builder: (itemProduct){
                   return GestureDetector(
-                    
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> CartPage(pageId: pageId))),
+                    onTap: (){
+                      if(itemProduct.totalItems>=1)
+                        Get.toNamed(RouterHelper.getCartPage(pageId));
+                        //Get.to(()=>CartPage());
+                    },
+                     // onTap:(){ if(itemProduct.totalItems>=1) () => Navigator.push(context, MaterialPageRoute(builder: (context)=> CartPage(pageId: pageId)));},
 
-                     
                     child: Stack(
                       children: [
                         AppIcon(icon: Icons.shopping_cart_checkout_outlined),
-                        Get.find<PopularProductController>().totalItems>=1?
+                        itemProduct.totalItems>=1?
                         Positioned(
+
                             right:0, top:0,
                             child: AppIcon(icon: Icons.circle, size: 20, iconColor: Colors.transparent, backGround: AppColors.textColor,)):Container(),
 
-                        Get.find<PopularProductController>().totalItems>=1?
+                        itemProduct.totalItems>=1?
                         Positioned(
                           right:3, top:3,
                           child: BigText(text: Get.find<PopularProductController>().totalItems.toString(),size: 12, color: Colors.white,),):Container()
@@ -146,8 +155,8 @@ class RecommendedFoodDetail extends StatelessWidget {
                             child: Text("Okay"),
                           ),
                           /*CupertinoDialogAction(
-            child: Text("No"),
-          )*/
+                          child: Text("No"),
+                                  )*/
                         ],
                       );
                     },
@@ -178,8 +187,8 @@ class RecommendedFoodDetail extends StatelessWidget {
                             child: Text("Okay"),
                           ),
                           /*CupertinoDialogAction(
-            child: Text("No"),
-          )*/
+                           child: Text("No"),
+                           )*/
                         ],
                       );
                     },
